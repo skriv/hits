@@ -1,4 +1,4 @@
-console.log("Hello HITS - V0.1");
+console.log("Hello HITS - V0.1-Vercel");
 
 
 // Определение функций для каждой страницы
