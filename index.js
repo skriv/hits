@@ -59,6 +59,7 @@ const pageFunctions = {
     openContactForm();
     updateCurrentYear();
     initDrawRandomUnderline();
+    changeBlogpostDate();
   }
 
   function initHome(container) {
@@ -133,14 +134,6 @@ function initReviewSection(next) {
       },
     });
   
-    // ScrollTrigger.create({
-    //   trigger: sliderTrigger,
-    //   start: "center 75%",
-    //   once: true,
-    //   onEnter: () => {
-    //     swiper.slideTo(2, 800, true);
-    //   },
-    // });
   }
 
 
@@ -148,24 +141,29 @@ function initReviewSection(next) {
 function openContactForm() {
 console.log("OpenContactForm");
 
-    let menuBtn = $('#modal');
-    console.log(menuBtn);
+    const menuBtn = $('#modal');
     const contactForm = $('#contact-form');
-    $('[data-attribute="data-modal-open"]').click(function() {
-        menuBtn.css('display', 'flex');
-        menuBtn.show();
-        // Set focus on the name field in the contact modal
-        $('#contact-modal-name').focus();
-         
-    });
 
-    $('[data-modal-close]').click(function() {
-        console.log("CloseContactForm");
+    function clearAndCloseForm() {
         contactForm.css('display', 'flex');
-        // Clear all text fields in the contact form
         contactForm.find('input[type="text"], input[type="email"], textarea').val('');
         hideSuccessMessage();
         menuBtn.hide();
+    }
+
+    $('[data-attribute="data-modal-open"]').click(() => {
+        menuBtn.css('display', 'flex').show();
+        $('#contact-modal-name').focus();
+    });
+
+    $('[data-modal-close]').click(() => {
+        clearAndCloseForm();
+    });
+
+    $(document).on('keydown', (event) => {
+        if (event.key === 'Escape') {
+            clearAndCloseForm(); 
+        }
     });
     
 }
@@ -218,7 +216,7 @@ function openMobileMenu() {
 // Update the current year
 function updateCurrentYear() {
     var currentYear = new Date().getFullYear();
-    $('.current-year').text(currentYear);
+    $('.current-year-date').text(currentYear);
 }
 
 // Share buttons
@@ -331,4 +329,17 @@ function initDrawRandomUnderline() {
       }
     });
   });
+}
+
+
+// Change Blogpost Date
+function changeBlogpostDate() {
+  const blogpostDate = $('.blog-post-date');
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString('ru-RU', { 
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  }).replace('г.', '').trim();
+  blogpostDate.text(formattedDate);
 }
