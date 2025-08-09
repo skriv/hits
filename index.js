@@ -60,6 +60,7 @@ const pageFunctions = {
     updateCurrentYear();
     initDrawRandomUnderline();
     changeBlogpostDate();
+    addIllustraionInText();
   }
 
   function initHome(container) {
@@ -343,3 +344,13 @@ function changeBlogpostDate() {
   }).replace('г.', '').trim();
   blogpostDate.text(formattedDate);
 }
+
+//Add Illustraion in Text
+function addIllustraionInText() {
+  document.querySelectorAll('.span-wrapper').forEach((wrapper, index) => {
+    const relatedEl = document.querySelectorAll('.span-element')[index];
+    wrapper.appendChild(relatedEl);
+  });
+}
+
+
