@@ -336,13 +336,32 @@ function initDrawRandomUnderline() {
 // Change Blogpost Date
 function changeBlogpostDate() {
   const blogpostDate = $('.blog-post-date');
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString('ru-RU', { 
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric'
-  }).replace('г.', '').trim();
-  blogpostDate.text(formattedDate);
+  const originalDate = blogpostDate.text(); // Get original English date
+  const dateParts = originalDate.match(/(\w+)\s+(\d+),\s+(\d+)/); // Parse "March 15, 2024" format
+  
+  if (dateParts) {
+    const months = {
+      'January': 'января',
+      'February': 'февраля', 
+      'March': 'марта',
+      'April': 'апреля',
+      'May': 'мая',
+      'June': 'июня',
+      'July': 'июля',
+      'August': 'августа',
+      'September': 'сентября',
+      'October': 'октября',
+      'November': 'ноября',
+      'December': 'декабря'
+    };
+    
+    const month = months[dateParts[1]] || dateParts[1];
+    const day = dateParts[2];
+    const year = dateParts[3];
+    
+    const russianDate = `${day} ${month} ${year}`;
+    blogpostDate.text(russianDate);
+  }
 }
 
 //Add Illustraion in Text
