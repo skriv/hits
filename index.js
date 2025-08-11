@@ -335,33 +335,36 @@ function initDrawRandomUnderline() {
 
 // Change Blogpost Date
 function changeBlogpostDate() {
-  const blogpostDate = $('.blog-post-date');
-  const originalDate = blogpostDate.text(); // Get original English date
-  const dateParts = originalDate.match(/(\w+)\s+(\d+),\s+(\d+)/); // Parse "March 15, 2024" format
+  const blogpostDates = $('.blog-post-date');
   
-  if (dateParts) {
-    const months = {
-      'January': 'января',
-      'February': 'февраля', 
-      'March': 'марта',
-      'April': 'апреля',
-      'May': 'мая',
-      'June': 'июня',
-      'July': 'июля',
-      'August': 'августа',
-      'September': 'сентября',
-      'October': 'октября',
-      'November': 'ноября',
-      'December': 'декабря'
-    };
+  blogpostDates.each(function() {
+    const originalDate = $(this).text(); // Get original English date
+    const dateParts = originalDate.match(/(\w+)\s+(\d+),\s+(\d+)/); // Parse "March 15, 2024" format
     
-    const month = months[dateParts[1]] || dateParts[1];
-    const day = dateParts[2];
-    const year = dateParts[3];
-    
-    const russianDate = `${day} ${month} ${year}`;
-    blogpostDate.text(russianDate);
-  }
+    if (dateParts) {
+      const months = {
+        'January': 'января',
+        'February': 'февраля', 
+        'March': 'марта',
+        'April': 'апреля',
+        'May': 'мая',
+        'June': 'июня',
+        'July': 'июля',
+        'August': 'августа',
+        'September': 'сентября',
+        'October': 'октября',
+        'November': 'ноября',
+        'December': 'декабря'
+      };
+      
+      const month = months[dateParts[1]] || dateParts[1];
+      const day = dateParts[2];
+      const year = dateParts[3];
+      
+      const russianDate = `${day} ${month} ${year}`;
+      $(this).text(russianDate);
+    }
+  });
 }
 
 //Add Illustraion in Text
