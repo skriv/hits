@@ -57,6 +57,7 @@ const pageFunctions = {
     // console.log('Инициализация общих функций', container);
     openMobileMenu();
     openContactForm();
+    initNavAnnounceClose();
     updateCurrentYear();
     initDrawRandomUnderline();
     changeBlogpostDate();
@@ -251,6 +252,36 @@ function openMobileMenu() {
         } catch {
             if (href.startsWith('#') && href.length > 1) closeMenu();
         }
+    });
+}
+
+// Close nav announce bar
+function initNavAnnounceClose() {
+    const announce = document.querySelector('.nav-announce');
+    if (!announce) return;
+
+    let isClosing = false;
+
+    document.addEventListener('click', (e) => {
+        const closeBtn = e.target.closest && e.target.closest('[data-announce-close]');
+        if (!closeBtn || isClosing) return;
+
+        isClosing = true;
+        const startHeight = announce.offsetHeight;
+
+        gsap.set(announce, {
+            height: startHeight,
+            overflow: 'hidden',
+        });
+
+        gsap.to(announce, {
+            height: 0,
+            duration: 0.3,
+            ease: 'power2.out',
+            onComplete: () => {
+                announce.style.display = 'none';
+            },
+        });
     });
 }
 
