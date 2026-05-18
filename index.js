@@ -220,18 +220,25 @@ function openMobileMenu() {
         }
     });
 
-    // Закрывать меню: явно [data-menu-close], либо любая same-origin ссылка с hash (#…),
-    // в т.ч. полный URL вида https://site.com/#section (Webflow часто так делает).
+    // Закрывать меню: явно [data-menu-close], либо клик по ссылке с hash (#…) того же origin.
+    // У Webflow в .btn_main_wrap клик может прилетать не на <a>, а на <button>/<span>,
+    // поэтому ищем ссылку и внутри ближайшей обёртки .g_clickable_wrap / .btn_main_wrap.
     mobileMenu.on('click', function (e) {
         if (!isOpen) return;
 
         const target = e.target;
-        if (target.closest && target.closest('[data-menu-close]')) {
+        if (!target || !target.closest) return;
+
+        if (target.closest('[data-menu-close]')) {
             closeMenu();
             return;
         }
 
-        const anchor = target.closest && target.closest('a');
+        let anchor = target.closest('a[href]');
+        if (!anchor) {
+            const wrap = target.closest('.g_clickable_wrap, .btn_main_wrap');
+            if (wrap) anchor = wrap.querySelector('a[href]');
+        }
         if (!anchor) return;
 
         const href = anchor.getAttribute('href');
