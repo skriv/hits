@@ -220,9 +220,30 @@ function openMobileMenu() {
         }
     });
 
-    // Закрывать меню при клике на элементы с [data-menu-close] внутри меню
-    mobileMenu.on('click', '[data-menu-close]', function() {
-        if (isOpen) closeMenu();
+    // Закрывать меню: явно [data-menu-close], либо любая same-origin ссылка с hash (#…),
+    // в т.ч. полный URL вида https://site.com/#section (Webflow часто так делает).
+    mobileMenu.on('click', function (e) {
+        if (!isOpen) return;
+
+        const target = e.target;
+        if (target.closest && target.closest('[data-menu-close]')) {
+            closeMenu();
+            return;
+        }
+
+        const anchor = target.closest && target.closest('a');
+        if (!anchor) return;
+
+        const href = anchor.getAttribute('href');
+        if (!href || href === '#') return;
+
+        try {
+            const url = new URL(anchor.href);
+            if (url.origin !== window.location.origin) return;
+            if (url.hash && url.hash.length > 1) closeMenu();
+        } catch {
+            if (href.startsWith('#') && href.length > 1) closeMenu();
+        }
     });
 }
 
