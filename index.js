@@ -1,4 +1,4 @@
-console.log("Hello HITS - V0.2-Local");
+console.log("Hello HITS - V0.3-Local");
 
 
 // Определение функций для каждой страницы
@@ -174,43 +174,55 @@ function openMobileMenu() {
     const menuBtn = $('.menu-btn');
     const lines = menuBtn.find('.menu-btn__line');
     let mobileMenu = $('.menu-w');
-    
+
+    function openMenu() {
+        console.log("OpenMenu");
+        mobileMenu.show();
+
+        gsap.to(lines.eq(0), {
+            rotation: 45,
+            y: 6,
+            duration: 0.3,
+            ease: "power2.out",
+            transformOrigin: "center"
+        });
+        gsap.to(lines.eq(1), {
+            rotation: -45,
+            y: -4,
+            duration: 0.3,
+            ease: "power2.out",
+            transformOrigin: "center"
+        });
+
+        isOpen = true;
+    }
+
+    function closeMenu() {
+        console.log("CloseMenu");
+        mobileMenu.hide();
+
+        gsap.to(lines, {
+            rotation: 0,
+            y: 0,
+            duration: 0.3,
+            ease: "power2.out",
+            transformOrigin: "center"
+        });
+
+        isOpen = false;
+    }
+
     menuBtn.click(function() {
         if (!isOpen) {
-
-            console.log("OpenMenu");
-            mobileMenu.show();
-
-            // Open animation
-            gsap.to(lines.eq(0), {
-                rotation: 45,
-                y: 6,
-                duration: 0.3,
-                ease: "power2.out",
-                transformOrigin: "center"
-            });
-            gsap.to(lines.eq(1), {
-                rotation: -45,
-                y: -4,
-                duration: 0.3,
-                ease: "power2.out",
-                transformOrigin: "center"
-            });
+            openMenu();
         } else {
-            
-            console.log("CloseMenu");
-            mobileMenu.hide();
-
-            // Close animation
-            gsap.to(lines, {
-                rotation: 0,
-                y: 0,
-                duration: 0.3,
-                ease: "power2.out",
-                transformOrigin: "center"
-            });
+            closeMenu();
         }
-        isOpen = !isOpen;
+    });
+
+    // Закрывать меню при клике на элементы с [data-menu-close] внутри меню
+    mobileMenu.on('click', '[data-menu-close]', function() {
+        if (isOpen) closeMenu();
     });
 }
 
