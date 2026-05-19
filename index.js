@@ -157,7 +157,7 @@ console.log("OpenContactForm");
         const url = window.AIRTABLE;
         if (url) {
             e.preventDefault();
-            window.location.assign(url);
+            window.open(url, '_blank', 'noopener,noreferrer');
             return;
         }
         menuBtn.css('display', 'flex').show();
