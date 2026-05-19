@@ -255,31 +255,44 @@ function openMobileMenu() {
     });
 }
 
-// Close nav announce bar
+// Close nav announce bar (cookie hides it for 1 day; otherwise height stays auto)
 function initNavAnnounceClose() {
     const announce = document.querySelector('.nav-announce');
     if (!announce) return;
+
+    if (window.HitsNavAnnounce?.isDismissed()) {
+        window.HitsNavAnnounce.hide();
+        return;
+    }
+
+    window.HitsNavAnnounce?.show();
 
     let isClosing = false;
 
     document.addEventListener('click', (e) => {
         const closeBtn = e.target.closest && e.target.closest('[data-announce-close]');
         if (!closeBtn || isClosing) return;
+        if (!announce.contains(closeBtn)) return;
 
         isClosing = true;
+
         const startHeight = announce.offsetHeight;
 
+        // auto → px, then animate to 0 (hide visible class only after height is locked)
         gsap.set(announce, {
             height: startHeight,
             overflow: 'hidden',
         });
+
+        window.HitsNavAnnounce?.hide();
 
         gsap.to(announce, {
             height: 0,
             duration: 0.3,
             ease: 'power2.out',
             onComplete: () => {
-                announce.style.display = 'none';
+                window.HitsNavAnnounce?.markDismissed();
+                gsap.set(announce, { clearProps: 'height,overflow' });
             },
         });
     });
@@ -445,5 +458,8 @@ function addIllustraionInText() {
     wrapper.appendChild(relatedEl);
   });
 }
+
+
+
 
 
