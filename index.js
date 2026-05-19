@@ -153,7 +153,13 @@ console.log("OpenContactForm");
         menuBtn.hide();
     }
 
-    $('[data-attribute="data-modal-open"]').click(() => {
+    $('[data-attribute="data-modal-open"], [data-modal-open]').click((e) => {
+        const url = window.AIRTABLE;
+        if (url) {
+            e.preventDefault();
+            window.location.assign(url);
+            return;
+        }
         menuBtn.css('display', 'flex').show();
         $('#contact-modal-name').focus();
     });
